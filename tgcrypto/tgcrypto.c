@@ -35,16 +35,24 @@ static PyObject *ige(PyObject *args, uint8_t encrypt) {
     Py_buffer data, key, iv;
     uint8_t *buf;
     PyObject *out;
+    uint32_t data_len;
 
     if (!PyArg_ParseTuple(args, "y*y*y*", &data, &key, &iv))
         return NULL;
 
-    if (data.len == 0) {
+    data_len = (uint32_t)data.len;
+
+    if (data_len != data.len) {
+        PyErr_SetString(PyExc_ValueError, "Data size is too large");
+        return NULL;
+    }
+
+    if (data_len == 0) {
         PyErr_SetString(PyExc_ValueError, "Data must not be empty");
         return NULL;
     }
 
-    if (data.len % 16 != 0) {
+    if (data_len % 16 != 0) {
         PyErr_SetString(PyExc_ValueError, "Data size must match a multiple of 16 bytes");
         return NULL;
     }
@@ -60,14 +68,14 @@ static PyObject *ige(PyObject *args, uint8_t encrypt) {
     }
 
     Py_BEGIN_ALLOW_THREADS
-        buf = ige256(data.buf, data.len, key.buf, iv.buf, encrypt);
+        buf = ige256(data.buf, data_len, key.buf, iv.buf, encrypt);
     Py_END_ALLOW_THREADS
 
     PyBuffer_Release(&data);
     PyBuffer_Release(&key);
     PyBuffer_Release(&iv);
 
-    out = Py_BuildValue("y#", buf, data.len);
+    out = Py_BuildValue("y#", buf, data_len);
     free(buf);
 
     return out;
@@ -85,11 +93,19 @@ static PyObject *ctr256_encrypt(PyObject *self, PyObject *args) {
     Py_buffer data, key, iv, state;
     uint8_t *buf;
     PyObject *out;
+    uint32_t data_len;
 
     if (!PyArg_ParseTuple(args, "y*y*y*y*", &data, &key, &iv, &state))
         return NULL;
 
-    if (data.len == 0) {
+    data_len = (uint32_t)data.len;
+
+    if (data_len != data.len) {
+        PyErr_SetString(PyExc_ValueError, "Data size is too large");
+        return NULL;
+    }
+
+    if (data_len == 0) {
         PyErr_SetString(PyExc_ValueError, "Data must not be empty");
         return NULL;
     }
@@ -115,14 +131,14 @@ static PyObject *ctr256_encrypt(PyObject *self, PyObject *args) {
     }
 
     Py_BEGIN_ALLOW_THREADS
-        buf = ctr256(data.buf, data.len, key.buf, iv.buf, state.buf);
+        buf = ctr256(data.buf, data_len, key.buf, iv.buf, state.buf);
     Py_END_ALLOW_THREADS
 
     PyBuffer_Release(&data);
     PyBuffer_Release(&key);
     PyBuffer_Release(&iv);
 
-    out = Py_BuildValue("y#", buf, data.len);
+    out = Py_BuildValue("y#", buf, data_len);
     free(buf);
 
     return out;
@@ -132,16 +148,24 @@ static PyObject *cbc(PyObject *args, uint8_t encrypt) {
     Py_buffer data, key, iv;
     uint8_t *buf;
     PyObject *out;
+    uint32_t data_len;
 
     if (!PyArg_ParseTuple(args, "y*y*y*", &data, &key, &iv))
         return NULL;
 
-    if (data.len == 0) {
+    data_len = (uint32_t)data.len;
+
+    if (data_len != data.len) {
+        PyErr_SetString(PyExc_ValueError, "Data size is too large");
+        return NULL;
+    }
+
+    if (data_len == 0) {
         PyErr_SetString(PyExc_ValueError, "Data must not be empty");
         return NULL;
     }
 
-    if (data.len % 16 != 0) {
+    if (data_len % 16 != 0) {
         PyErr_SetString(PyExc_ValueError, "Data size must match a multiple of 16 bytes");
         return NULL;
     }
@@ -157,14 +181,14 @@ static PyObject *cbc(PyObject *args, uint8_t encrypt) {
     }
 
     Py_BEGIN_ALLOW_THREADS
-        buf = cbc256(data.buf, data.len, key.buf, iv.buf, encrypt);
+        buf = cbc256(data.buf, data_len, key.buf, iv.buf, encrypt);
     Py_END_ALLOW_THREADS
 
     PyBuffer_Release(&data);
     PyBuffer_Release(&key);
     PyBuffer_Release(&iv);
 
-    out = Py_BuildValue("y#", buf, data.len);
+    out = Py_BuildValue("y#", buf, data_len);
     free(buf);
 
     return out;

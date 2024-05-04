@@ -1,6 +1,6 @@
 # TgCrypto
 
-> Fast and Portable Cryptography Extension Library for Pyrogram
+> Cryptography Extension Library for Pyrogram
 
 **TgCrypto** is a Cryptography Library written in C as a Python extension. It is designed to be portable, fast,
 easy to install and use. TgCrypto is intended for [Pyrogram](https://github.com/pyrogram/pyrogram) and implements the
@@ -12,12 +12,12 @@ cryptographic algorithms Telegram requires, namely:
 
 ## Requirements
 
-- Python 3.7 or higher.
+- Python 3.9 or higher.
 
 ## Installation
 
 ``` bash
-$ pip3 install -U tgcrypto
+$ pip3 install -U cryptgram
 ```
 
 ## API
@@ -147,13 +147,6 @@ cbc_decrypted = tgcrypto.cbc256_decrypt(cbc_encrypted, key, dec_iv)
 
 print(data == cbc_decrypted)  # True
 ```
-
-## Testing
-
-1. Clone this repository: `git clone https://github.com/pyrogram/tgcrypto`.
-2. Enter the directory: `cd tgcrypto`.
-3. Install `tox`: `pip3 install tox`
-4. Run tests: `tox`.
 
 ## License
 
