@@ -44,10 +44,7 @@ jobs:
   publish:
     name: Publish wheels to PyPI
     needs: build_wheels
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ubuntu-latest
 
     steps:
       - name: Download artifacts
